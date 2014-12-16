@@ -55,7 +55,6 @@ abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
             
             $formattedContent = $this->getHtmlFormatter()->format($content);
             $domFactory = $this->getDomDocumentFactory();
-            //$domFactory->setEncoding($encoding);
             $domDocument = $domFactory->getDomDocument($formattedContent);
             $document->setDomDocument($domDocument);
         }
