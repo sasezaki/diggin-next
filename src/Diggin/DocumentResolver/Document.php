@@ -4,6 +4,9 @@ namespace Diggin\DocumentResolver;
 use DOMDocument;
 use DOMXPath;
 
+/**
+ * @todo Consider psr-7 Psr\Http\Message\MessageInterface
+ */
 class Document
 {
     private $uri;
@@ -11,10 +14,28 @@ class Document
     private $content;
     private $domDocument;
     private $domXpath;
+    private $httpMessage;
 
     public function setUri($uri)
     {
         $this->uri = $uri;
+    }
+    
+    public function getUri()
+    {
+        return $this->uri;
+    }
+    
+    /**
+     * @return HttpMessage
+     */
+    public function getHttpMessage()
+    {
+        if (!$this->httpMessage instanceof HttpMessage) {
+            $this->httpMessage = new HttpMessage();
+        }
+        
+        return $this->httpMessage;
     }
     
     public function setContent($content)

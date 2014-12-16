@@ -1,12 +1,12 @@
 <?php
 namespace Diggin\DocumentResolver;
 
-use Diggin\HttpCharset\HttpCharsetFrontAwareTrait;
+use Diggin\HttpCharset\HttpCharsetManagerAwareTrait;
 use Diggin\HtmlFormatter\HtmlFormatterAwareTrait;
 
 abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
 {
-    use HttpCharsetFrontAwareTrait;
+    use HttpCharsetManagerAwareTrait;
     use HtmlFormatterAwareTrait;
 
     use DomDocumentFactoryAwareTrait;
@@ -36,13 +36,26 @@ abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
         $document = $this->getDocument();
         if (!$document->getDomDocument()) {
             $content = $document->getContent();
+            
+            $charsetManager = $this->getHttpCharsetManager();
+            $matched = $charsetManager->matchUri($document->getUri());
+            
+            if ($matched) {
+                $encoding = $matched->charsetEncoding;
+            } else {
+                // todo check if $document instanceof getHttpMessageAware...
+                $contentType = $document->getHttpMessage()->getHeader('Content-Type');
+                $encoding = $charsetManager->detect($content, $contentType);
+                
+                // if $document instanceof detectedCharsetEncoding
+                //$document->setDetectedEncoding($encoding);
 
-            $charsetFront = $this->getHttpCharsetFront();
-            $encoding = $charsetFront->detect($content);
-            $content = $charsetFront->convert($document->getContent());
+                $content = $charsetManager->convert($document->getContent(), $encoding);
+            }
+            
             $formattedContent = $this->getHtmlFormatter()->format($content);
             $domFactory = $this->getDomDocumentFactory();
-            $domFactory->setEncoding($encoding);
+            //$domFactory->setEncoding($encoding);
             $domDocument = $domFactory->getDomDocument($formattedContent);
             $document->setDomDocument($domDocument);
         }

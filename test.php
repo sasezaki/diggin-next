@@ -24,6 +24,7 @@ HTML;
     $document = new \Diggin\DocumentResolver\Document();
     $document->setUri('http://example.com/');
     $document->setContent($content);
+    $document->getHttpMessage()->setHeader('Content-Type', 'UTF-8');
     
     return $document;
 };
