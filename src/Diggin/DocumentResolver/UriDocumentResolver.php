@@ -25,6 +25,7 @@ class UriDocumentResolver extends AbstractDocumentResolver
             $content = file_get_contents($this->uri);
             $document = new \Diggin\DocumentResolver\Document();
             $document->setContent($content);
+            $document->setUri($this->uri);
             
             return $document;
         };

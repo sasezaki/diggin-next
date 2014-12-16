@@ -11,11 +11,26 @@ class Scraper
 {
     public function scrape(DomDocumentProviderInterface $documentResolver)
     {
+        $documentResolver->getUri();
         $documentResolver->getDomDocument();
     }
 }
 
-$documentResolver = new UriDocumentResolver('http://musicrider.com/');
+$stringDocumentResolver = function () {
+    $content = <<<'HTML'
+<html><title>test title</title><body>test body</body></html>    
+HTML;
+
+    $document = new \Diggin\DocumentResolver\Document();
+    $document->setUri('http://example.com/');
+    $document->setContent($content);
+    
+    return $document;
+};
+
+//$documentResolver = new UriDocumentResolver('http://musicrider.com/');
+$documentResolver = new UriDocumentResolver('http://musicrider.com/', $stringDocumentResolver);
+
 //$documentResolver->setHtmlFormatter(new \Diggin\HtmlFormatter\HtmlFormatter());
 
 $domXpath = $documentResolver->getDomXpath();

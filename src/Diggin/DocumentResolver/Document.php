@@ -7,12 +7,16 @@ use DOMXPath;
 class Document
 {
     private $uri;
-    private $originUri;
 
     private $content;
     private $domDocument;
     private $domXpath;
 
+    public function setUri($uri)
+    {
+        $this->uri = $uri;
+    }
+    
     public function setContent($content)
     {
         $this->content = $content;
