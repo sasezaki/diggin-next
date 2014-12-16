@@ -1,7 +1,7 @@
 <?php
 namespace Diggin\DocumentResolver;
 
-interface GetDomDocumentInterface
+interface DomDocumentProviderInterface
 {
     public function getDomDocument();
 }

@@ -7,5 +7,4 @@ trait DomXpathFactoryAwareTrait
     {
         return new DomXpathFactory();
     }
-
-} 
+}

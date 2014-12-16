@@ -3,6 +3,11 @@ namespace Diggin\DocumentResolver;
 
 use DOMDocument;
 
+/**
+ * This code fragment is originally from the Zend\Dom.
+ * 
+ * @license New BSD, code from Zend Framework
+ */
 class DomDocumentFactory
 {
     /**#@+

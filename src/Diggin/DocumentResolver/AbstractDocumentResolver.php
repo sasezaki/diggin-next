@@ -4,7 +4,7 @@ namespace Diggin\DocumentResolver;
 use Diggin\HttpCharset\HttpCharsetFrontAwareTrait;
 use Diggin\HtmlFormatter\HtmlFormatterAwareTrait;
 
-class StandardDocumentResolver implements GetDomDocumentInterface
+abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
 {
     use HttpCharsetFrontAwareTrait;
     use HtmlFormatterAwareTrait;
@@ -13,25 +13,24 @@ class StandardDocumentResolver implements GetDomDocumentInterface
     use DomXpathFactoryAwareTrait;
 
     /**
-     * @var string
+     * @return Document
      */
-    private $uri;
-
+    abstract protected function getDocument();
+    
     /**
-     * @var Document
+     * A proxy to Document's getContent
+     * 
+     * @return string
      */
-    private $document;
-
-    public function setUri($uri)
-    {
-        $this->uri = $uri;
-    }
-
     public function getContent()
     {
         $this->getDocument()->getContent();
     }
 
+    /**
+     * @see DomDocumentProviderInterface::getDomDocument()
+     * @return \DomDocument
+     */
     public function getDomDocument()
     {
         $document = $this->getDocument();
@@ -64,21 +63,5 @@ class StandardDocumentResolver implements GetDomDocumentInterface
         }
 
         return $domXpath;
-    }
-
-    /**
-     * @return Document
-     */
-    protected function getDocument()
-    {
-        if (!$this->document instanceof Document) {
-
-            $content = file_get_contents($this->uri);
-            $document = new Document();
-
-            $document->setContent($content);
-            $this->document = $document;
-        }
-        return $this->document;
     }
 }

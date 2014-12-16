@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: kazusuke
- * Date: 14/06/27
- * Time: 1:17
- */
-
 namespace Diggin\DocumentResolver;
-
 
 class DocumentResolverFactory
 {
