@@ -3,12 +3,18 @@ namespace Diggin\DocumentResolver;
 
 trait DomDocumentFactoryAwareTrait
 {
+    protected $domDocumentFactory;
+    
     /**
      * @return DomDocumentFactory
      */
     public function getDomDocumentFactory()
     {
-        return new DomDocumentFactory();
+        if (!$this->domDocumentFactory instanceof DomDocumentFactory) {
+            $this->domDocumentFactory = new DomDocumentFactory();
+        }
+        
+        return $this->domDocumentFactory;
     }
 
 } 

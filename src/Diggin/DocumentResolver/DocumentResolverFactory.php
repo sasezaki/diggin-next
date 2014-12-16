@@ -3,9 +3,9 @@ namespace Diggin\DocumentResolver;
 
 class DocumentResolverFactory
 {
-    public static function fromUri($uri, $originUri = false)
+    public static function fromUri($uri)
     {
-        $resolver = new StandardDocumentResolver();
+        $resolver = new UriDocumentResolver($uri);
         $resolver->setUri($uri);
         return $resolver;
     }

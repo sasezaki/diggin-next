@@ -41,7 +41,8 @@ var_dump($nodeList);
 $nodeList = $domXpath->evaluate('//body');
 var_dump($nodeList->item(0)->textContent);
 
+// var_dump($documentResolver->getDomDocumentFactory()->getDocumentErrors()); could be ???
 die;
 
-//$scraper = new Scraper();
-//$scraper->scrape(DocumentResolverFactory::fromUri($uri));
+$scraper = new Scraper();
+$scraper->scrape(new UriDocumentResolver("http://musicrider.com/"));

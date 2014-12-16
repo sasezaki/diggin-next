@@ -3,8 +3,14 @@ namespace Diggin\DocumentResolver;
 
 trait DomXpathFactoryAwareTrait
 {
+    protected $domXpathFactory;
+    
     public function getDomXpathFactory()
     {
-        return new DomXpathFactory();
+        if (!$this->domXpathFactory instanceof DomXpathFactory) {
+            $this->domXpathFactory = new DomXpathFactory();
+        }
+        
+        return $this->domXpathFactory;
     }
 }
