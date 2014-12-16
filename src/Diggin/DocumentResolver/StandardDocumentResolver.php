@@ -39,11 +39,11 @@ class StandardDocumentResolver implements GetDomDocumentInterface
             $content = $document->getContent();
 
             $charsetFront = $this->getHttpCharsetFront();
-            $encoding = $charsetFront->detect();
+            $encoding = $charsetFront->detect($content);
             $content = $charsetFront->convert($document->getContent());
             $formattedContent = $this->getHtmlFormatter()->format($content);
             $domFactory = $this->getDomDocumentFactory();
-            $domFactory->setEncoding('UTF-8');
+            $domFactory->setEncoding($encoding);
             $domDocument = $domFactory->getDomDocument($formattedContent);
             $document->setDomDocument($domDocument);
         }
