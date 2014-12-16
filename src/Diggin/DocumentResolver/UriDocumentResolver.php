@@ -42,7 +42,7 @@ class UriDocumentResolver extends AbstractDocumentResolver
     {
         if (!$this->document instanceof Document) {
             $documentInvoker = $this->documentInvoker;
-            $this->document = $documentInvoker();
+            $this->document = call_user_func($documentInvoker);
         }
         
         return $this->document;
