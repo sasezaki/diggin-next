@@ -21,11 +21,11 @@ class UriDocumentResolver extends AbstractDocumentResolver
     public function __construct($uri, $documentInvoker = null)
     {
         $this->uri = $uri;
-        $this->documentInvoker = is_callable($documentInvoker) ? $documentInvoker : function () {
-            $content = file_get_contents($this->uri);
+        $this->documentInvoker = is_callable($documentInvoker) ? $documentInvoker : function ($uri) {
+            $content = file_get_contents($uri);
             $document = new \Diggin\DocumentResolver\Document();
             $document->setContent($content);
-            $document->setUri($this->uri);
+            $document->setUri($uri);
             
             return $document;
         };
@@ -43,7 +43,7 @@ class UriDocumentResolver extends AbstractDocumentResolver
     {
         if (!$this->document instanceof Document) {
             $documentInvoker = $this->documentInvoker;
-            $this->document = call_user_func($documentInvoker);
+            $this->document = call_user_func($documentInvoker, $this->uri);
         }
         
         return $this->document;

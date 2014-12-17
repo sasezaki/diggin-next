@@ -16,6 +16,11 @@ class HttpMessage
         $this->headers[$header] = $value;
     }
     
+    public function hasHeader($header)
+    {
+        return array_key_exists($header, $this->headers);
+    }
+    
     public function getHeader($header)
     {
         return $this->headers[$header];

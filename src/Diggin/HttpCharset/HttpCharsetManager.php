@@ -1,6 +1,7 @@
 <?php
 namespace Diggin\HttpCharset;
 
+use Diggin\HttpCharset\Detector\DetectorInterface;
 class HttpCharsetManager
 {
     use DetectorPluginManagerAwareTrait;
@@ -10,15 +11,24 @@ class HttpCharsetManager
         return false;
     }
 
-    public function detect($body, $contentType)
+    /**
+     * @todo if contentType is null
+     * 
+     * @param string $body
+     * @param string $contentType
+     * @throws Exception\DetectException
+     */
+    public function detect($body, $contentType = null, $detectorName = 'html')
     {
+        /**
         if (preg_match('#^text/html#i', $contentType)) {
-            $detector = 'html';
+            $detectorName = 'html';
         } else {
             throw new Exception\DetectException();
-        }
+        }*/
         
-        $detector = $this->getDetectorPluginManager()->get($detector);
+        /** @var \Diggin\HttpCharset\Detector\DetectorInterface $detector */
+        $detector = $this->getDetectorPluginManager()->get($detectorName);
         return $detector->detect($body, $contentType);
     }
 }

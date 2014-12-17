@@ -46,8 +46,12 @@ abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
                 $content = $document->getContent();
             } else {
                 // todo check if $document instanceof getHttpMessageAware... 
-                
-                $contentType = $document->getHttpMessage()->getHeader('Content-Type');
+                $httpMessage = $document->getHttpMessage();
+                if ($httpMessage->hasHeader('Content-Type')) {
+                    $contentType = $httpMessage->getHeader('Content-Type');
+                } else {
+                    $contentType = null;
+                }
                 $content = $document->getContent();
                 
                 $content = HttpCharsetFilter::removeBomAndNulls($content);

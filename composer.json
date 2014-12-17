@@ -2,7 +2,8 @@
   "require" : {
     "zendframework/zend-servicemanager" : "~2.2",
     "zendframework/zend-eventmanager" : "~2.2",
-    "amphp/artax" : "~0.7"
+    "amphp/artax" : "dev-master",
+    "psr/http-message" : "=0.5.1"
   },
   "authors" : [ {
     "name" : "sasezaki",
