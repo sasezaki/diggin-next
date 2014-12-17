@@ -1,10 +1,34 @@
 <?php
 namespace Diggin\HtmlFormatter;
 
+/**
+ * This class is remodeling of HTMLScraping
+ * 
+ * @see http://www.rcdtokyo.com/etc/htmlscraping/
+ *
+ * This class require tidy extension
+ */
+
+/**
+ * ---------------------------------------------------------------------
+ * HTMLScraping class
+ * ---------------------------------------------------------------------
+ * LICENSE: This source file is subject to the GNU Lesser General Public
+ * License as published by the Free Software Foundation;
+ * either version 2.1 of the License, or any later version
+ * that is available through the world-wide-web at the following URI:
+ * http://www.gnu.org/licenses/lgpl.html
+ * If you did not have a copy of the GNU Lesser General Public License
+ * and are unable to obtain it through the web, please write to
+ * the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * ---------------------------------------------------------------------
+ */
+
 class TidyHtmlFormatter
 {
     /**
-     * Configuration array, set using the constructor or using ::setConfig()
+     * Configuration array
      *
      * @var array
      * @see http://tidy.sourceforge.net/docs/quickref.html
@@ -22,14 +46,35 @@ class TidyHtmlFormatter
     /**
      * @var array
      */
-    private $backup = array();
+    private $backup = [];
     /**
      * @var integer
     */
     private $backup_count = 0;
+    
+    /**
+     * Set configuration parameters for this
+     *
+     * @param array $config
+     * @throws Exception\InvalidArgumentException
+     */
+    public function setConfig($config = array())
+    {
+        if (!is_array($config)) {
+            throw new Exception\InvalidArgumentException('Expected array parameter, given ' . gettype($config));
+        }
+    
+        if (isset($config['tidy']['output-xhtml']) && $config['tidy']['output-xhtml'] !== true) {
+            throw new Exception\InvalidArgumentException('tidy-config "output-xhtml" not as true - not allowed');
+        }
+    
+        foreach ($config as $k => $v) {
+            $this->config[strtolower($k)] = $v;
+        }
+    }
 
     /**
-     * $content must UTF-8 
+     * $content must be UTF-8 
      * 
      * @param string $content
      * @return string
@@ -39,12 +84,17 @@ class TidyHtmlFormatter
         return $this->getXhtml($html);
     }
     
+    /**
+     * @param string $responseBody
+     * @throws Exception\UnexpectedValueException
+     * @return string
+     */
     public function getXhtml($responseBody)
     {
         /*
          * Initialize the backups.
          */
-        $this->backup = array();
+        $this->backup = [];
         $this->backup_count = 0;
         /*
          * Removing SCRIPT and STYLE is recommended.
@@ -52,7 +102,7 @@ class TidyHtmlFormatter
          * If use it, be sure that some JavaScript method such as document.write
          * is not compliant with XHTML/XML.
          */
-        $tags = array('script', 'style');
+        $tags = ['script', 'style'];
         foreach ($tags as $tag) {
             $responseBody = preg_replace("/<$tag\b[^>]*?>.*?<\/$tag\b[^>]*?>/si", '' , $responseBody);
         }
@@ -60,56 +110,53 @@ class TidyHtmlFormatter
          * Backup CDATA sections for later process.
          */
         $responseBody = preg_replace_callback(
-            '/<!\[CDATA\[.*?\]\]>/s', array($this, 'backup'), $responseBody
+            '/<!\[CDATA\[.*?\]\]>/s', [$this, 'backup'], $responseBody
         );
         /*
          * Comment section must not contain two or more adjacent hyphens.
-        */
+         */
         $responseBody = preg_replace_callback(
-            '/<!--(.*?)-->/si',
-            create_function('$matches', '
+            '/<!--(.*?)-->/si', function ($matches) {
                 return "<!-- ".preg_replace("/-{2,}/", "-", $matches[1])." -->";
-            '),
+            },
             $responseBody
         );
         /*
          * Backup comment sections for later process.
-        */
+         */
         $responseBody = preg_replace_callback(
-            '/<!--.*?-->/s', array($this, 'backup'), $responseBody
+            '/<!--.*?-->/s', [$this, 'backup'], $responseBody
         );
         /*
          * Process tags that is potentially dangerous for XML parsers.
-        */
+         */
         $responseBody = preg_replace_callback(
-            '/(<textarea\b[^>]*?>)(.*?)(<\/textarea\b[^>]*?>)/si',
-            create_function('$matches', '
+            '/(<textarea\b[^>]*?>)(.*?)(<\/textarea\b[^>]*?>)/si', function ($matches) {
                 return $matches[1].str_replace("<", "&lt;", $matches[2]).$matches[3];
-            '),
+            },
             $responseBody
         );
         $responseBody = preg_replace_callback(
-            '/<xmp\b[^>]*?>(.*?)<\/xmp\b[^>]*?>/si',
-            create_function('$matches', '
+            '/<xmp\b[^>]*?>(.*?)<\/xmp\b[^>]*?>/si', function ($matches) {
                 return "<pre>".str_replace("<", "&lt;", $matches[1])."</pre>";
-            '),
+            },
             $responseBody
         );
         $responseBody = preg_replace_callback(
-            '/<plaintext\b[^>]*?>(.*)$/si',
-            create_function('$matches', '
+            '/<plaintext\b[^>]*?>(.*)$/si', function ($matches) {
                 return "<pre>".str_replace("<", "&lt;", $matches[1])."</pre>";
-            '),
+            },
             $responseBody
         );
         /*
          * Remove DTD declarations, wrongly placed comments etc.
          * This must be done before removing DOCTYPE.
-        */
+         */
         $responseBody = preg_replace('/<!(?!DOCTYPE)[^>]*?>/si', '', $responseBody);
+
         /*
          * XML and DOCTYPE declaration will be replaced.
-        */
+         */
         $responseBody = preg_replace('/<!DOCTYPE\b[^>]*?>/si', '', $responseBody);
         $responseBody = preg_replace('/<\?xml\b[^>]*?\?>/si', '', $responseBody);
         if (preg_match('/^\s*$/s', $responseBody)) {
@@ -121,11 +168,7 @@ class TidyHtmlFormatter
         for ($i = 0; $i < $this->backup_count; $i++) {
             $responseBody = str_replace("<restore count=\"$i\" />", $this->backup[$i], $responseBody);
         }
-        /*
-         * Use Tidy to format HTML if available.
-         * Otherwise, use HTMLParser class (is slower and consumes much memory).
-         */
-        
+                
         /*
          * Replace every '&' with '&amp;'
          * for XML parser not to break on non-predefined entities.
@@ -136,12 +179,11 @@ class TidyHtmlFormatter
          * And tidy, it will replace htmlspecialchars('>' '<') to ('&lt;, '&gt;'')
          * if not as Html Tag for tidy.
          * so, "str_replace('&')" before tidy.
-         */
-        
-        
+         */        
         if ($this->config['pre_ampersand_escape']) {
             $responseBody = str_replace('&', '&amp;', $responseBody);
         }
+        
         $tidy = new \tidy();
         $tidy->parseString($responseBody, $this->config['tidy'], 'UTF8');
         $tidy->cleanRepair();
@@ -161,7 +203,7 @@ class TidyHtmlFormatter
     /**
      * backup (Html and Xml comment)
      *
-     * @param  array   $matches
+     * @param  array $matches
      * @return string
      */
     private function backup($matches)
@@ -172,4 +214,4 @@ class TidyHtmlFormatter
     
         return $replace;
     }
-} 
+}
