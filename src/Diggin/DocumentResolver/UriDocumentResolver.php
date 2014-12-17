@@ -29,23 +29,6 @@ class UriDocumentResolver extends AbstractDocumentResolver
             
             return $document;
         };
-        
-        $this->attachStandardEvents();
-    }
-    
-    public function attachStandardEvents()
-    {
-        $em = $this->getEventManager();
-        $em->attach('detect.pre', function(\Zend\EventManager\Event $e){
-            $params = $e->getParams();
-            
-            $document = $params[0];
-
-            /** @var \Diggin\DocumentResolver\Document $document */
-            $content = $document->getContent();
-            $document->setContent($content);
-            return $document;
-        });
     }
     
     public function setUri($uri)
