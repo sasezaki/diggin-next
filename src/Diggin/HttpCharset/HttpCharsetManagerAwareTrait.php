@@ -12,4 +12,4 @@ trait HttpCharsetManagerAwareTrait
         }
         return $this->httpCharsetManager;
     }
-} 
+}

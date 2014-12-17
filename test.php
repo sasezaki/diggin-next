@@ -1,5 +1,4 @@
 <?php
-use Diggin\DocumentResolver\DocumentResolverFactory;
 use Diggin\DocumentResolver\UriDocumentResolver;
 use Diggin\DocumentResolver\DomDocumentProviderInterface;
 
@@ -24,15 +23,13 @@ HTML;
     $document = new \Diggin\DocumentResolver\Document();
     $document->setUri('http://example.com/');
     $document->setContent($content);
-    $document->getHttpMessage()->setHeader('Content-Type', 'UTF-8');
+    $document->getHttpMessage()->setHeader('Content-Type', 'text/html; charset=Shift-JIS;');
     
     return $document;
 };
 
 //$documentResolver = new UriDocumentResolver('http://musicrider.com/');
 $documentResolver = new UriDocumentResolver('http://musicrider.com/', $stringDocumentResolver);
-
-//$documentResolver->setHtmlFormatter(new \Diggin\HtmlFormatter\HtmlFormatter());
 
 $domXpath = $documentResolver->getDomXpath();
 
@@ -46,4 +43,7 @@ var_dump($nodeList->item(0)->textContent);
 die;
 
 $scraper = new Scraper();
+$process->at('key', $exp, function ($nodeList) {
+});
+//$process->atAll('key',);
 $scraper->scrape(new UriDocumentResolver("http://musicrider.com/"));

@@ -1,0 +1,11 @@
+{
+  "require" : {
+    "zendframework/zend-servicemanager" : "~2.2",
+    "zendframework/zend-eventmanager" : "~2.2",
+    "amphp/artax" : "~0.7"
+  },
+  "authors" : [ {
+    "name" : "sasezaki",
+    "email" : "sasezaki@gmail.com"
+  } ]
+}

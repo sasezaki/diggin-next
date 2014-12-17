@@ -1,11 +1,15 @@
 <?php
 namespace Diggin\DocumentResolver;
 
+use Zend\EventManager\EventManagerAwareTrait;
+use Zend\EventManager\Event;
 use Diggin\HttpCharset\HttpCharsetManagerAwareTrait;
 use Diggin\HtmlFormatter\HtmlFormatterAwareTrait;
 
 abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
 {
+    use EventManagerAwareTrait;
+    
     use HttpCharsetManagerAwareTrait;
     use HtmlFormatterAwareTrait;
 
@@ -35,22 +39,27 @@ abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
     {
         $document = $this->getDocument();
         if (!$document->getDomDocument()) {
-            $content = $document->getContent();
             
             $charsetManager = $this->getHttpCharsetManager();
             $matched = $charsetManager->matchUri($document->getUri());
             
             if ($matched) {
                 $encoding = $matched->charsetEncoding;
+                $content = $document->getContent();
             } else {
-                // todo check if $document instanceof getHttpMessageAware...
+                // todo check if $document instanceof getHttpMessageAware...           
+                $event = new Event('detect.pre', $this, [$document]);
+                
                 $contentType = $document->getHttpMessage()->getHeader('Content-Type');
+                $content = $document->getContent();
+                $this->getEventManager()->trigger($event);
+                
                 $encoding = $charsetManager->detect($content, $contentType);
                 
                 // if $document instanceof detectedCharsetEncoding
                 //$document->setDetectedEncoding($encoding);
 
-                $content = $charsetManager->convert($document->getContent(), $encoding);
+                $content = $charsetManager->convert($content, $encoding);
             }
             
             $formattedContent = $this->getHtmlFormatter()->format($content);
