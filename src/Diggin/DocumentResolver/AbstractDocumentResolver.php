@@ -3,6 +3,7 @@ namespace Diggin\DocumentResolver;
 
 use Diggin\HttpCharset\HttpCharsetManagerAwareTrait;
 use Diggin\HttpCharset\Filter as HttpCharsetFilter;
+use Diggin\HttpCharset\CharsetEncoding;
 use Diggin\HtmlFormatter\HtmlFormatterAwareTrait;
 
 abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
@@ -50,12 +51,12 @@ abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
                 $content = $document->getContent();
                 
                 $content = HttpCharsetFilter::removeBomAndNulls($content);
-                $encoding = $charsetManager->detect($content, $contentType);
+                $from_encoding = $charsetManager->detect($content, $contentType);
                 
                 // if $document instanceof detectedCharsetEncoding
                 //$document->setDetectedEncoding($encoding);
 
-                $content = $charsetManager->convert($content, $encoding);
+                $content = CharsetEncoding::convert($content, 'UTF-8', $from_encoding);
             }
             
             $formattedContent = $this->getHtmlFormatter()->format($content);
