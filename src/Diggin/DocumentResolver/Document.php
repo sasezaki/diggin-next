@@ -4,13 +4,15 @@ namespace Diggin\DocumentResolver;
 use DOMDocument;
 use DOMXPath;
 
-/**
- * @todo Consider psr-7 Psr\Http\Message\MessageInterface
- */
 class Document
 {
+    /**
+     * origin's uri or base uri,
+     * not resource(data-storage) uri
+     * @var string
+     */
     private $uri;
-
+    
     private $content;
     private $domDocument;
     private $domXpath;
@@ -28,6 +30,7 @@ class Document
     
     /**
      * @return HttpMessage
+     * @todo Consider psr-7 Psr\Http\Message\MessageInterface
      */
     public function getHttpMessage()
     {

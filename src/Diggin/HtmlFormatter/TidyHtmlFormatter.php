@@ -25,7 +25,7 @@ namespace Diggin\HtmlFormatter;
  * ---------------------------------------------------------------------
  */
 
-class TidyHtmlFormatter
+class TidyHtmlFormatter implements HtmlFormatterInterface
 {
     /**
      * Configuration array
@@ -51,6 +51,11 @@ class TidyHtmlFormatter
      * @var integer
     */
     private $backup_count = 0;
+    
+    public function getConfig()
+    {
+        return $this->config;
+    }
     
     /**
      * Set configuration parameters for this
@@ -179,7 +184,7 @@ class TidyHtmlFormatter
          * And tidy, it will replace htmlspecialchars('>' '<') to ('&lt;, '&gt;'')
          * if not as Html Tag for tidy.
          * so, "str_replace('&')" before tidy.
-         */        
+         */
         if ($this->config['pre_ampersand_escape']) {
             $responseBody = str_replace('&', '&amp;', $responseBody);
         }
