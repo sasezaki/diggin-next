@@ -1,8 +1,6 @@
 <?php
 namespace Diggin\DocumentResolver;
 
-use DOMDocument;
-
 /**
  * This code fragment is originally from the Zend\Dom.
  * 

@@ -10,7 +10,7 @@ $autoload->add('Diggin\\', __DIR__.'/src');
 
 $documentInvoker = function ($uri) {
     $content = <<<'HTML'
-<html><title>test title</title><body>test &amp; body</body></html>    
+<html><title>test title</title><body>aa<span class="main">test<span>EM</span> &amp; -> body</span>bbbb</body></html>    
 HTML;
 
     $document = new \Diggin\DocumentResolver\Document();
@@ -27,9 +27,9 @@ $scraper = new Scraper();
 
 $process = new Process();
 $process->setType('dom');
-$process->setExpression("body");
+$process->setExpression('//span[@class="main"]');
 
-// function () {}    // class DirectProcess
+// function (DOMDocument $domDocument) {}    // class DirectProcess
 // ['body' => 'type', $filter1, $filter2], $arrayFlag;
 // ['body' => function() {}], $arrayFlag;
 

@@ -9,7 +9,7 @@ $autoload->add('Diggin\\', __DIR__.'/src');
 
 $stringDocumentResolver = function ($uri) {
     $content = <<<'HTML'
-<html><title>test title</title><body>test body</body></html>    
+<html><title>test title</title><body>test & body&lt;</body></html>    
 HTML;
 
     $document = new \Diggin\DocumentResolver\Document();

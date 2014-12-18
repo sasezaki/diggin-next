@@ -1,7 +1,6 @@
 <?php
 namespace Diggin\DocumentResolver;
 
-use DOMDocument;
 use DOMXPath;
 
 class DomXpathFactory
@@ -9,7 +8,7 @@ class DomXpathFactory
     private $xpathNamespaces = [];
     private $xpathPhpFunctions = true;
 
-    public function fromDomDocument(DOMDocument $domDocument)
+    public function fromDomDocument(\DOMDocument $domDocument)
     {
         $xpath      = new DOMXPath($domDocument);
         foreach ($this->xpathNamespaces as $prefix => $namespaceUri) {

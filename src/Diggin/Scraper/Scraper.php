@@ -14,13 +14,27 @@ class Scraper
 	
     public function scrape(DomDocumentProviderInterface $documentResolver, Process $process)
     {
-        //$documentResolver->getHtmlFormatter()->setConfig(['pre_ampersand_escape' => true]);
         // $documentResolver->getDomDocument();
         
         $domXpath = $documentResolver->getDomXpath();
         $xpath = $this->xpathTransfomer->xpathOrCss2Xpath($process->getExpression());
         $nodeList = $domXpath->evaluate($xpath);
         
-        return $nodeList->item(0)->textContent;
+        var_dump(get_class($nodeList->item(0)->ownerDocument));
+        
+        $domElement = $nodeList->item(0);
+        
+        return $domElement->ownerDocument->saveHTML($domElement);
+//         return $domElement->textContent;
     }
 }
+
+// class DomCrawlerBridge
+// {
+//     public function scrape()
+//     {
+//         $domDocument = $documentResolver->getDomDocument();
+        
+//  //       new Symfony\Component\DomCrawler...
+//     }
+// }

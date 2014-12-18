@@ -1,6 +1,5 @@
 <?php
 use Diggin\DocumentResolver\UriDocumentResolver;
-use Diggin\DocumentResolver\DomDocumentProviderInterface;
 use Diggin\DocumentResolver\DocumentInvoker\ArtaxDocumentInvoker;
 
 /** @var Composer\Autoload\ClassLoader $autoload */
@@ -9,7 +8,6 @@ $autoload->add('Diggin\\', __DIR__.'/src');
 
 
 $documentInvoker = new ArtaxDocumentInvoker();
-
 $request = $documentInvoker->getRequest();
 $request->appendHeader('User-Agent', "diggin");
 

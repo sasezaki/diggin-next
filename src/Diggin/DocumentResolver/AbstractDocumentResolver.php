@@ -63,9 +63,18 @@ abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
                 $content = CharsetEncoding::convert($content, 'UTF-8', $from_encoding);
             }
             
-            $formattedContent = $this->getHtmlFormatter()->format($content);
+            $pre_ampersand_escape = true;
+
+            $formatter = $this->getHtmlFormatter();
+            $formatter->setConfig(['pre_ampersand_escape' => $pre_ampersand_escape]);            
+            $formattedContent = $formatter->format($content);
+            
+            // remove namespaces.
+            //$formattedContent = FormatterUtil::removeNamespaces($formattedContent);
+            
             $domFactory = $this->getDomDocumentFactory();
             $domDocument = $domFactory->getDomDocument($formattedContent);
+            $domDocument->preAmpersandEscape = $pre_ampersand_escape;
             $document->setDomDocument($domDocument);
         }
 
