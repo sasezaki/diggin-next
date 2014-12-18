@@ -29,7 +29,7 @@ class UriDocumentResolver extends AbstractDocumentResolver
         $this->documentInvoker = is_callable($documentInvoker) ? $documentInvoker : function ($uri) {
             $content = file_get_contents($uri);
             $document = new \Diggin\DocumentResolver\Document();
-            $document->setContent($content);
+            $document->setContent($content); // todo move setContent -> setContentFactory(callble)
             $document->setUri($uri);
             
             return $document;

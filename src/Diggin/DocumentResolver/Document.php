@@ -41,6 +41,9 @@ class Document
         return $this->httpMessage;
     }
     
+    /**
+     * @deprecated
+     */
     public function setContent($content)
     {
         $this->content = $content;

@@ -76,6 +76,10 @@ abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
             $domDocument = $domFactory->getDomDocument($formattedContent);
             $domDocument->preAmpersandEscape = $pre_ampersand_escape;
             
+            //$html5domfactory = $this->getDomDocumentFactoryPluginManager()->plugin('html5');
+            //$html5domfactory->getDom
+            
+            
             $document->setDomDocument($domDocument);
         }
 
