@@ -8,11 +8,11 @@ $autoload->add('Diggin\\', __DIR__.'/src');
 
 
 $documentInvoker = new ArtaxDocumentInvoker();
-$request = $documentInvoker->getRequest();
+$request = $documentInvoker->getDefaultRequest();
 $request->appendHeader('User-Agent', "diggin");
 
-//$documentResolver = new UriDocumentResolver('http://httpbin.org/user-agent', $documentInvoker);
-$documentResolver = new UriDocumentResolver('https://github.com/composer/composer/commit/ac676f47f7bbc619678a29deae097b6b0710b799', $documentInvoker);
+$documentResolver = new UriDocumentResolver('http://httpbin.org/user-agent', $documentInvoker);
+//$documentResolver = new UriDocumentResolver('https://github.com/composer/composer/commit/ac676f47f7bbc619678a29deae097b6b0710b799', $documentInvoker);
 
 $domXpath = $documentResolver->getDomXpath();
 

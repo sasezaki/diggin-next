@@ -3,7 +3,7 @@
 /**
  * DigginHttpCharset
  *
- * a part of this package (Diggin_Http_Charset_Detector_Html) is
+ * a part of this package (HtmlDetector) is
  * borrowed from HTMLScraping
  *
  * @see http://www.rcdtokyo.com/etc/htmlscraping/
@@ -33,7 +33,7 @@ class HtmlDetector implements DetectorInterface
      */
     private $detectOrder = 'ASCII, JIS, UTF-8, eucJP-win, EUC-JP, SJIS-win, SJIS';
 
-    private $_config = [
+    private $config = [
         'accept_header_ctype' => true,
         'force_detect_body' => false,
         'detect_prefer_mime' => false,
@@ -55,7 +55,7 @@ class HtmlDetector implements DetectorInterface
         }
 
         foreach ($config as $k => $v) {
-            $this->_config[strtolower($k)] = $v;
+            $this->config[strtolower($k)] = $v;
         }
 
         return $this;
@@ -120,7 +120,7 @@ class HtmlDetector implements DetectorInterface
         if (isset($contentType)) {
             $encoding = $this->_getCharsetFromCType($contentType);
         }
-        if ((!$encoding or (!$this->_config['accept_header_ctype']))
+        if ((!$encoding or (!$this->config['accept_header_ctype']))
                 and preg_match_all('/<meta\b[^>]*?>/si', $responseBody, $matches)) {
             foreach ($matches[0] as $value) {
                 $encoding = $this->_getAttribute('charset', $value);
@@ -138,7 +138,7 @@ class HtmlDetector implements DetectorInterface
         /*
          * detect character encoding
          */
-        if ((in_array($encoding, $this->getListAgainstMime())) or (!$encoding or $this->_config['force_detect_body'])) {
+        if ((in_array($encoding, $this->getListAgainstMime())) or (!$encoding or $this->config['force_detect_body'])) {
             $detect = @mb_detect_encoding($responseBody, $this->getDetectOrder());
 
             /*
@@ -156,7 +156,7 @@ class HtmlDetector implements DetectorInterface
                     return $detect;
                 }
 
-                if ($this->_config['detect_prefer_mime']) {
+                if ($this->config['detect_prefer_mime']) {
                     $detect = @mb_preferred_mime_name($detect);
                     if (!$detect) {
                         throw new Exception\DetectException('Failed preferred_mime_name.');
@@ -169,13 +169,9 @@ class HtmlDetector implements DetectorInterface
             throw new Exception\DetectException('Failed detecting character encoding.');
         }
 
-        //if ($wellknown = array_search($encoding, array('HZ-GB-2312' => 'GB-2312'))) {
-        //  return $wellknown;
-        //}
-
-        if (is_array($this->_config['iconv_map']) &&
-            in_array(strtoupper($encoding), array_keys($this->_config['iconv_map']))) {
-            $encoding = $this->_config['iconv_map'][strtoupper($encoding)];
+        if (is_array($this->config['iconv_map']) &&
+            in_array(strtoupper($encoding), array_keys($this->config['iconv_map']))) {
+            $encoding = $this->config['iconv_map'][strtoupper($encoding)];
         }
 
         return $encoding;

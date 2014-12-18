@@ -3,7 +3,7 @@
 /**
  * DigginHttpCharset
  *
- * a part of this package (Diggin_Http_Charset_Detector_Html) is
+ * a part of this package (HtmlDetector) is
  * borrowed from HTMLScraping
  *
  * @see http://www.rcdtokyo.com/etc/htmlscraping/

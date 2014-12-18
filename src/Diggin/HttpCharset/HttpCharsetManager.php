@@ -1,7 +1,6 @@
 <?php
 namespace Diggin\HttpCharset;
 
-use Diggin\HttpCharset\Detector\DetectorInterface;
 class HttpCharsetManager
 {
     use DetectorPluginManagerAwareTrait;
@@ -27,7 +26,7 @@ class HttpCharsetManager
             throw new Exception\DetectException();
         }*/
         
-        /** @var \Diggin\HttpCharset\Detector\DetectorInterface $detector */
+        /** @var DetectorInterface $detector */
         $detector = $this->getDetectorPluginManager()->get($detectorName);
         return $detector->detect($body, $contentType);
     }

@@ -5,6 +5,9 @@
     "amphp/artax" : "dev-master",
     "psr/http-message" : "=0.5.1"
   },
+  "require-dev" : {
+    "masterminds/html5" : "~2.0"
+  },
   "authors" : [ {
     "name" : "sasezaki",
     "email" : "sasezaki@gmail.com"

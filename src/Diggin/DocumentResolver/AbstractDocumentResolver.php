@@ -69,12 +69,13 @@ abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
             $formatter->setConfig(['pre_ampersand_escape' => $pre_ampersand_escape]);            
             $formattedContent = $formatter->format($content);
             
-            // remove namespaces.
+            // remove namespaces.   
             //$formattedContent = FormatterUtil::removeNamespaces($formattedContent);
             
             $domFactory = $this->getDomDocumentFactory();
             $domDocument = $domFactory->getDomDocument($formattedContent);
             $domDocument->preAmpersandEscape = $pre_ampersand_escape;
+            
             $document->setDomDocument($domDocument);
         }
 

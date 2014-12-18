@@ -7,7 +7,7 @@ use Diggin\DocumentResolver\Document;
 
 class ArtaxDocumentInvoker
 {
-    protected $request;
+    protected $defaultRequest;
     protected $client;
     
     public function getClient()
@@ -19,32 +19,25 @@ class ArtaxDocumentInvoker
         return $this->client;
     }
     
-    public function getRequest()
+    public function getDefaultRequest()
     {
-        if (!$this->request instanceof Request) {
-            $this->request = new Request;
+        if (!$this->defaultRequest instanceof Request) {
+            $this->defaultRequest = new Request;
         }
     
-        return $this->request;
+        return $this->defaultRequest;
     }
     
     protected function request($uri)
     {
-        // needs for current "PHP Deprecated:  Amp\Promise::wait() is deprecated and scheduled for removal."
-        $before = error_reporting(E_ALL &~E_USER_DEPRECATED);
-        
-        try {
-            $request = clone $this->getRequest();
-            $request->setUri($uri);
-        
-            $response = $this->getClient()->request($request)->wait();
+        $request = clone $this->getDefaultRequest();
+        $request->setUri($uri);
+    
+        /** @var \Amp\Promise $promise */
+        $promise = $this->getClient()->request($request);            
+        $response = \Amp\wait($promise);
 
-            return $response;
-        } catch (Exception $error) {
-            echo $error;
-        } finally {
-            error_reporting($before);
-        }
+        return $response;
     }
     
     public function __invoke($uri)

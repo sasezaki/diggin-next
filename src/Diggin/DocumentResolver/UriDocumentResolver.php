@@ -18,6 +18,11 @@ class UriDocumentResolver extends AbstractDocumentResolver
      */
     private $documentInvoker;
 
+    /**
+     * @param string $uri
+     * @param callable|null $documentInvoker
+     * @return \Diggin\DocumentResolver\Document
+     */
     public function __construct($uri, $documentInvoker = null)
     {
         $this->uri = $uri;
@@ -35,7 +40,7 @@ class UriDocumentResolver extends AbstractDocumentResolver
     {
         $this->uri = $uri;
     }
-    
+
     /**
      * @return Document
      */
