@@ -29,3 +29,6 @@ $nodeList = $domXpath->evaluate('php:functionString("strtoupper", //title)');
 var_dump($nodeList);
 $nodeList = $domXpath->evaluate('//body');
 var_dump($nodeList->item(0)->textContent);
+
+
+// $documentResolver->getDomXpathFactory()->registerXpathPhpFunctions($xpathPhpFunctions)

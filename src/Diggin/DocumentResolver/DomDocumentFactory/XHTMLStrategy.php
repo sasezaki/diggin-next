@@ -18,14 +18,12 @@ class XHTMLStrategy
     use HtmlFormatterAwareTrait;
 
     private $document;
-    private $xpathNamespaces;
 
     private $loadHTMLMethod;
     
-    public function __construct(Document $document, array $xpathNamespaces = [])
+    public function __construct(Document $document)
     {
         $this->document = $document;
-        $this->xpathNamespaces = $xpathNamespaces;
     }
     
     public function getDomDocument()

@@ -1,17 +1,10 @@
 <?php
 namespace Diggin\DocumentResolver;
 
-use Diggin\HttpCharset\HttpCharsetManagerAwareTrait;
-use Diggin\HttpCharset\Filter as HttpCharsetFilter;
-use Diggin\HttpCharset\CharsetEncoding;
-use Diggin\HtmlFormatter\HtmlFormatterAwareTrait;
 use Diggin\DocumentResolver\DomDocumentFactory\FactorySelector as DomDocumentFactorySelector;
 
 abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
-{    
-    use HttpCharsetManagerAwareTrait;
-    use HtmlFormatterAwareTrait;
-
+{
     use DomXpathFactoryAwareTrait;
 
     /**
@@ -37,19 +30,17 @@ abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
     {
         $document = $this->getDocument();
         if (!$document->getDomDocument()) {
-            
-            //$selector = $this->getDomDocumentFactoryStrategySelector($document);
-            
+                        
             $selector = $this->getDomDocumentFactorySelector($document);
-            $domDocumentFactory = $selector->select();            
-            $document->setDomDocument($domDocumentFactory->getDomDocument());
-            
+            $domDocumentFactory = $selector->select();
+            $domDocument = $domDocumentFactory->getDomDocument();
+            $document->setDomDocument($domDocumentFactory->getDomDocument());            
         }
 
         return $document->getDomDocument();
     }
     
-    public function getDomDocumentFactorySelector(Document $document)
+    protected function getDomDocumentFactorySelector(Document $document)
     {
         return new DomDocumentFactorySelector($document);
     }
@@ -59,11 +50,13 @@ abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
      */
     public function getDomXpath()
     {
-        $domXpath = $this->getDocument()->getDomXpath();
+        $document = $this->getDocument();
+        $domXpath = $document->getDomXpath();
         if (!$domXpath) {
             $domDocument = $this->getDomDocument();
-            $domXpath = $this->getDomXpathFactory()->fromDomDocument($domDocument);
-            $this->getDocument()->setDomXpath($domXpath);
+            $domXpathFactory = $this->getDomXpathFactory();
+            $domXpath = $domXpathFactory->fromDomDocument($domDocument, $document->getDomXpathNamespaces());
+            $document->setDomXpath($domXpath);
         }
 
         return $domXpath;

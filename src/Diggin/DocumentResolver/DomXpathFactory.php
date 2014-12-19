@@ -5,15 +5,20 @@ use DOMXPath;
 
 class DomXpathFactory
 {
-    private $xpathNamespaces = [];
     private $xpathPhpFunctions = true;
-
-    public function fromDomDocument(\DOMDocument $domDocument)
+    
+    public function registerXpathPhpFunctions($xpathPhpFunctions)
     {
-        $xpath      = new DOMXPath($domDocument);
-        foreach ($this->xpathNamespaces as $prefix => $namespaceUri) {
+        $this->xpathPhpFunctions = $xpathPhpFunctions;
+    }
+    
+    public function fromDomDocument(\DOMDocument $domDocument, array $xpathNamespaces = [])
+    {
+        $xpath = new DOMXPath($domDocument);
+        foreach ($xpathNamespaces as $prefix => $namespaceUri) {
             $xpath->registerNamespace($prefix, $namespaceUri);
         }
+        
         if ($this->xpathPhpFunctions) {
             $xpath->registerNamespace("php", "http://php.net/xpath");
             ($this->xpathPhpFunctions === true) ?

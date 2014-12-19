@@ -16,6 +16,7 @@ class FactorySelector
      * detect & select factory
      * 
      * @todo detect from stream
+     * @todo HTML5
      */ 
     public function select()
     {
@@ -25,8 +26,8 @@ class FactorySelector
         // breaking XML declaration to make syntax highlighting work
         if ('<' . '?xml' == substr(trim($content), 0, 5)) {
             if (preg_match('/<html[^>]*xmlns="([^"]+)"[^>]*>/i', $content, $matches)) {
-                
-                return new XHTMLStrategy($document, $matches[1]); 
+                $document->setDomXpathNamespaces($matches[1]);
+                return new XHTMLStrategy($document); 
             }
             
             //return $this->setDocumentXml($content, $encoding);
@@ -35,25 +36,5 @@ class FactorySelector
         // html will be formatted as XHTML with HTMLFormatter in XHTMLStrategy
         
         return new XHTMLStrategy($document); 
-        
-        
-        
-//         // breaking XML declaration to make syntax highlighting work
-//         if ('<' . '?xml' == substr(trim($document), 0, 5)) {
-//             if (preg_match('/<html[^>]*xmlns="([^"]+)"[^>]*>/i', $document, $matches)) {
-//                 $this->xpathNamespaces[] = $matches[1];
-//                 return $this->setDocumentXhtml($document, $encoding);
-//             }
-//             return $this->setDocumentXml($document, $encoding);
-//         }
-//         if (strstr($document, 'DTD XHTML')) {
-//             return $this->setDocumentXhtml($document, $encoding);
-//         }
-//         return $this->setDocumentHtml($document, $encoding);
-
-        $document = $this->document;
-        //$document->getStream()
-        
-        return new XHTMLStrategy($document);
     }
 } 

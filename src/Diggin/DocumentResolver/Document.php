@@ -17,6 +17,7 @@ class Document
     private $domDocument;
     private $domDocumentErrors;
     private $domXpath;
+    private $domXpathNamespaces = [];
     private $httpMessage;
 
     public function setUri($uri)
@@ -64,6 +65,14 @@ class Document
         $this->domDocument = $domDocument;
     }
     
+    /**
+     * @return \DomDocument
+     */
+    public function getDomDocument()
+    {
+        return $this->domDocument;
+    }
+    
     public function setDomDocumentErrors($domDocumentErrors)
     {
         $this->domDocumentErrors = $domDocumentErrors;
@@ -74,16 +83,18 @@ class Document
         $this->domXpath = $domXpath;
     }
 
-    /**
-     * @return \DomDocument
-     */
-    public function getDomDocument()
-    {
-        return $this->domDocument;
-    }
-
     public function getDomXpath()
     {
         return $this->domXpath;
+    }
+    
+    public function setDomXpathNamespaces(array $domXpathNamespaces = [])
+    {
+        $this->domXpathNamespaces = $domXpathNamespaces;
+    }
+    
+    public function getDomXpathNamespaces()
+    {
+        return $this->domXpathNamespaces;
     }
 }
