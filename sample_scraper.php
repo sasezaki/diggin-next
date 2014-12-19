@@ -22,7 +22,6 @@ HTML;
 };
 
 $documentResolver = new UriDocumentResolver('http://musicrider.com/', $documentInvoker);
-
 $scraper = new Scraper();
 
 $process = new Process();

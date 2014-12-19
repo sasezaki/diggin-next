@@ -15,6 +15,7 @@ class Document
     
     private $content;
     private $domDocument;
+    private $domDocumentErrors;
     private $domXpath;
     private $httpMessage;
 
@@ -42,7 +43,6 @@ class Document
     }
     
     /**
-     * @deprecated
      */
     public function setContent($content)
     {
@@ -53,10 +53,20 @@ class Document
     {
         return $this->content;
     }
+    
+//     public function getStream()
+//     {
+        
+//     }
 
     public function setDomDocument(DOMDocument $domDocument)
     {
         $this->domDocument = $domDocument;
+    }
+    
+    public function setDomDocumentErrors($domDocumentErrors)
+    {
+        $this->domDocumentErrors = $domDocumentErrors;
     }
 
     public function setDomXpath(DOMXPath $domXpath)

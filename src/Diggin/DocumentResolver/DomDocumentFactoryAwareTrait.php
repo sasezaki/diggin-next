@@ -1,6 +1,9 @@
 <?php
 namespace Diggin\DocumentResolver;
 
+/**
+ * @deprecated
+ */
 trait DomDocumentFactoryAwareTrait
 {
     protected $domDocumentFactory;
