@@ -7,7 +7,7 @@ $autoload = require_once __DIR__.'/vendor/autoload.php';
 $autoload->add('Diggin\\', __DIR__.'/src');
 
 
-$stringDocumentResolver = function ($uri) {
+$documentInvoker = function ($uri) {
     $content = <<<'HTML'
 <html><title>test title</title><body>test & body&lt;</body></html>    
 HTML;
@@ -20,7 +20,7 @@ HTML;
     return $document;
 };
 
-$documentResolver = new UriDocumentResolver('http://musicrider.com/', $stringDocumentResolver);
+$documentResolver = new UriDocumentResolver('http://musicrider.com/', $documentInvoker);
 
 $domXpath = $documentResolver->getDomXpath();
 
@@ -30,5 +30,5 @@ var_dump($nodeList);
 $nodeList = $domXpath->evaluate('//body');
 var_dump($nodeList->item(0)->textContent);
 
-
+// $documentResolver->getDomDocumentFactorySelector()->
 // $documentResolver->getDomXpathFactory()->registerXpathPhpFunctions($xpathPhpFunctions)

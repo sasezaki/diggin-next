@@ -3,6 +3,9 @@ namespace Diggin\HttpCharset;
 
 trait HttpCharsetManagerAwareTrait
 {
+    /**
+     * @var HttpCharsetManager
+     */
     protected $httpCharsetManager;
     
     public function getHttpCharsetManager()

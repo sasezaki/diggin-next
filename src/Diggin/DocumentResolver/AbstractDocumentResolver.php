@@ -2,10 +2,13 @@
 namespace Diggin\DocumentResolver;
 
 use Diggin\DocumentResolver\DomDocumentFactory\FactorySelector as DomDocumentFactorySelector;
+use Diggin\DocumentResolver\DomDocumentFactory\XHTMLStrategy;
 
 abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
 {
     use DomXpathFactoryAwareTrait;
+    
+    protected $domDocumentFactorySelector;
 
     /**
      * @return Document
@@ -31,18 +34,27 @@ abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
         $document = $this->getDocument();
         if (!$document->getDomDocument()) {
                         
-            $selector = $this->getDomDocumentFactorySelector($document);
-            $domDocumentFactory = $selector->select();
+            $selector = $this->getDomDocumentFactorySelector();
+            
+            //$select = $selector->select($document);
+            //$domDocumentFactory = $this->getDomDocumentFactoryPluginManager()->get($select);
+            
+            $domDocumentFactory = new XHTMLStrategy($document);
+            
             $domDocument = $domDocumentFactory->getDomDocument();
-            $document->setDomDocument($domDocumentFactory->getDomDocument());            
+            $document->setDomDocument($domDocument);            
         }
 
         return $document->getDomDocument();
     }
     
-    protected function getDomDocumentFactorySelector(Document $document)
+    protected function getDomDocumentFactorySelector()
     {
-        return new DomDocumentFactorySelector($document);
+        if (!$this->domDocumentFactorySelector instanceof DomDocumentFactorySelector) {
+            $this->domDocumentFactorySelector = new DomDocumentFactorySelector();
+        }
+        
+        return $this->domDocumentFactorySelector;
     }
 
     /**

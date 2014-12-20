@@ -18,7 +18,6 @@ class XHTMLStrategy
     use HtmlFormatterAwareTrait;
 
     private $document;
-
     private $loadHTMLMethod;
     
     public function __construct(Document $document)
@@ -29,7 +28,6 @@ class XHTMLStrategy
     public function getDomDocument()
     {
         $document = $this->document;
-        
         $charsetManager = $this->getHttpCharsetManager();
         $matched = $charsetManager->matchUri($document->getUri());
         
@@ -62,10 +60,7 @@ class XHTMLStrategy
         $formatter = $this->getHtmlFormatter();
         $formatter->setConfig(['pre_ampersand_escape' => $pre_ampersand_escape]);
         $formattedContent = $formatter->format($content);
-        
-        // remove namespaces.
-        //$formattedContent = FormatterUtil::removeNamespaces($formattedContent);
-        
+                
         $loadHTMLMethod = new LoadHTMLMethod();
         
         $domDocument = $loadHTMLMethod->getDomDocument($formattedContent, $from_encoding);
