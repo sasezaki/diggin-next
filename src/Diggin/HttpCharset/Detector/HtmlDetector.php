@@ -213,7 +213,7 @@ class HtmlDetector implements DetectorInterface
      */
     protected function _getAttribute($name, $string)
     {
-        $search = "'[\s\'\"]\b".$name."\b\s*=\s*([^\s\'\">]+|\'[^\']+\'|\"[^\"]+\")'si";
+        $search = "'[\s\'\"]".'\b'.$name.'\b'."\s*=\s*([^\s\'\">]+|\'[^\']+\'|\"[^\"]+\")'si";
         if (preg_match($search, $string, $matches)) {
             return preg_replace('/^\s*[\'\"](.+)[\'\"]\s*$/s', '$1', $matches[1]);
         } else {

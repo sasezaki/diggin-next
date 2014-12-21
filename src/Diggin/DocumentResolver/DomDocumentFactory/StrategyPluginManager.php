@@ -17,13 +17,6 @@ class StrategyPluginManager extends AbstractPluginManager
     ];
     
     /**
-     * Do not share by default
-     *
-     * @var array
-     */
-    protected $shareByDefault = false;
-    
-    /**
      * Validate the plugin
      *
      * Checks that the adapter loaded is an instance of StorageInterface.

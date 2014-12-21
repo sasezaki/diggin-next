@@ -2,7 +2,6 @@
 namespace Diggin\DocumentResolver;
 
 use Diggin\DocumentResolver\DomDocumentFactory\FactorySelector as DomDocumentFactorySelector;
-use Diggin\DocumentResolver\DomDocumentFactory\FormattingHtmlStrategy;
 use Diggin\DocumentResolver\DomDocumentFactory\StrategyPluginManagerAwareTrait;
 
 abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
@@ -50,6 +49,9 @@ abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
         return $document->getDomDocument();
     }
     
+    /**
+     * @return DomDocumentFactorySelector
+     */
     protected function getDomDocumentFactorySelector()
     {
         if (!$this->domDocumentFactorySelector instanceof DomDocumentFactorySelector) {

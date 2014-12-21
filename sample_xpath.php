@@ -1,6 +1,5 @@
 <?php
 use Diggin\DocumentResolver\UriDocumentResolver;
-use Diggin\DocumentResolver\DomDocumentProviderInterface;
 
 /** @var Composer\Autoload\ClassLoader $autoload */
 $autoload = require_once __DIR__.'/vendor/autoload.php';
