@@ -14,6 +14,9 @@ class Scraper
 	
     public function scrape(DomDocumentProviderInterface $documentResolver, Process $process)
     {
+        //$metadata = $documentResolver->getMetadata();
+        //$metadata;//['created_at' => DateTime]
+        
         // $documentResolver->getDomDocument();
         
         $domXpath = $documentResolver->getDomXpath();

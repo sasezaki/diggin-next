@@ -1,7 +1,7 @@
 <?php
 namespace Diggin\DocumentResolver\DomDocumentFactory;
 
-class HTML5Strategy
+class MastermindsHTML5Strategy
 {
     
 }

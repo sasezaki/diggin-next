@@ -4,8 +4,10 @@ namespace Diggin\DocumentResolver\DomDocumentFactory;
 use Diggin\DocumentResolver\Document;
 
 class FactorySelector
-{   
+{
+    const SELECT_HTML = 'html';
     const SELECT_XHTML = 'xhtml';
+    const SELECT_HTML5 = 'html5';
     const SELECT_XML = 'xml';
     
     /**
@@ -22,16 +24,12 @@ class FactorySelector
         if ('<' . '?xml' == substr(trim($content), 0, 5)) {
             if (preg_match('/<html[^>]*xmlns="([^"]+)"[^>]*>/i', $content, $matches)) {
                 $document->setDomXpathNamespaces($matches[1]);
-//                 return new XHTMLStrategy($document);
                 return self::SELECT_XHTML;
             }
             
-            //return $this->setDocumentXml($content, $encoding);
+            return self::SELECT_XML;
         }
         
-        // html will be formatted as XHTML with HTMLFormatter in XHTMLStrategy
-        
-        return self::SELECT_XHTML;
-//         return new XHTMLStrategy($document); 
+        return self::SELECT_HTML;
     }
 } 

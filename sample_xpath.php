@@ -30,5 +30,11 @@ var_dump($nodeList);
 $nodeList = $domXpath->evaluate('//body');
 var_dump($nodeList->item(0)->textContent);
 
+// customize if you need
+/** @var \Diggin\DocumentResolver\DomDocumentFactory\FormattingHtmlStrategy $strategy */
+$strategy = $documentResolver->getStrategyPluginManager()->get('html');
+$strategy->getHtmlFormatter(); // Diggin\HtmlFormatter\TidyHtmlFormatter
+$strategy->getHttpCharsetManager()->getDetectorPluginManager()->get('html'); // Diggin\HttpCharset\Detector\HtmlDetector
+
 // $documentResolver->getDomDocumentFactorySelector()->
 // $documentResolver->getDomXpathFactory()->registerXpathPhpFunctions($xpathPhpFunctions)

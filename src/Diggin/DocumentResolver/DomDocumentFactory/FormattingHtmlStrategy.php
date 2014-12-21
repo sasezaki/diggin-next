@@ -9,25 +9,15 @@ use Diggin\HttpCharset\CharsetEncoding;
 use Diggin\HtmlFormatter\HtmlFormatterAwareTrait;
 
 /**
- * This strategy 
- * tidy's output-xhtml
+ * This strategy use HtmlFormatter (relies on tidy extension)
  */
-class XHTMLStrategy
+class FormattingHtmlStrategy implements AssembleDomDocumentInterface
 {
     use HttpCharsetManagerAwareTrait;
     use HtmlFormatterAwareTrait;
-
-    private $document;
-    private $loadHTMLMethod;
     
-    public function __construct(Document $document)
+    public function assemble(Document $document)
     {
-        $this->document = $document;
-    }
-    
-    public function getDomDocument()
-    {
-        $document = $this->document;
         $charsetManager = $this->getHttpCharsetManager();
         $matched = $charsetManager->matchUri($document->getUri());
         
@@ -70,5 +60,4 @@ class XHTMLStrategy
         
         return $domDocument;
     }
-    
 }
