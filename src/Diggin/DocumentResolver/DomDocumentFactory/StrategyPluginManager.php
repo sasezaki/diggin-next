@@ -19,7 +19,7 @@ class StrategyPluginManager extends AbstractPluginManager
     /**
      * Validate the plugin
      *
-     * Checks that the adapter loaded is an instance of StorageInterface.
+     * Checks that the assembler loaded is an instance of AssembleDomDocumentInterface.
      *
      * @param  mixed $plugin
      * @return void

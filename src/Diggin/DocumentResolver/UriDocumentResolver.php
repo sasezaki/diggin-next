@@ -21,7 +21,6 @@ class UriDocumentResolver extends AbstractDocumentResolver
     /**
      * @param string $uri
      * @param callable|null $documentInvoker
-     * @return \Diggin\DocumentResolver\Document
      */
     public function __construct($uri, $documentInvoker = null)
     {

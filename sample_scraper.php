@@ -23,7 +23,6 @@ HTML;
 
 $documentResolver = new UriDocumentResolver('http://musicrider.com/', $documentInvoker);
 $scraper = new Scraper();
-
 $process = new Process();
 $process->setType('dom');
 $process->setExpression('//span[@class="main"]');

@@ -19,6 +19,10 @@ HTML;
     return $document;
 };
 
+// $domInvoker = $documentResolver->domDocument();
+// $domInvoker();
+
+
 $documentResolver = new UriDocumentResolver('http://musicrider.com/', $documentInvoker);
 
 $domXpath = $documentResolver->getDomXpath();

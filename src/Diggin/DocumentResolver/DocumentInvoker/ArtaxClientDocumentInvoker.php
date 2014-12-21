@@ -5,7 +5,7 @@ use Amp\Artax\Client;
 use Amp\Artax\Request;
 use Diggin\DocumentResolver\Document;
 
-class ArtaxDocumentInvoker
+class ArtaxClientDocumentInvoker
 {
     protected $defaultRequest;
     protected $client;
