@@ -5,5 +5,5 @@ use Diggin\DocumentResolver\Document;
 
 interface AssembleDomDocumentInterface
 {
-    public function assemble(Document $document);    
+    public function assembleDomDocument(Document $document);    
 }

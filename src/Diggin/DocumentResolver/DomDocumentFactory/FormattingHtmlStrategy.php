@@ -16,7 +16,7 @@ class FormattingHtmlStrategy implements AssembleDomDocumentInterface
     use HttpCharsetManagerAwareTrait;
     use HtmlFormatterAwareTrait;
     
-    public function assemble(Document $document)
+    public function assembleDomDocument(Document $document)
     {
         $charsetManager = $this->getHttpCharsetManager();
         $matched = $charsetManager->matchUri($document->getUri());

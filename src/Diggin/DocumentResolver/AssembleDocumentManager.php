@@ -3,8 +3,9 @@ namespace Diggin\DocumentResolver;
 
 use Diggin\DocumentResolver\DomDocumentFactory\FactorySelector as DomDocumentFactorySelector;
 use Diggin\DocumentResolver\DomDocumentFactory\StrategyPluginManagerAwareTrait;
+use Diggin\DocumentResolver\DomDocumentFactory\AssembleDomDocumentInterface;
 
-abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
+class AssembleDocumentManager implements AssembleDomDocumentInterface
 {
     use DomXpathFactoryAwareTrait;
     use StrategyPluginManagerAwareTrait {
@@ -14,27 +15,11 @@ abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
     protected $domDocumentFactorySelector;
 
     /**
-     * @return Document
-     */
-    abstract protected function getDocument();
-    
-    /**
-     * A proxy to Document's getContent()
-     * 
-     * @return string
-     */
-    public function getContent()
-    {
-        $this->getDocument()->getContent();
-    }
-
-    /**
      * @see DomDocumentProviderInterface::getDomDocument()
      * @return \DomDocument
      */
-    public function getDomDocument()
+    public function assembleDomDocument(Document $document)
     {
-        $document = $this->getDocument();
         if (!$document->getDomDocument()) {
                         
             $selector = $this->getDomDocumentFactorySelector();
@@ -42,11 +27,28 @@ abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
             $select = $selector->select($document);
             $domDocumentFactory = $this->getDomDocumentFactoryStrategyPluginManager()->get($select);
                         
-            $domDocument = $domDocumentFactory->assemble($document);
+            $domDocument = $domDocumentFactory->assembleDomDocument($document);
             $document->setDomDocument($domDocument);            
         }
 
         return $document->getDomDocument();
+    }
+
+
+    /**
+     * @return \DOMXPath
+     */
+    public function assembleDomXpath(Document $document)
+    {
+        $domXpath = $document->getDomXpath();
+        if (!$domXpath) {
+            $domDocument = $this->assembleDomDocument($document);
+            $domXpathFactory = $this->getDomXpathFactory();
+            $domXpath = $domXpathFactory->fromDomDocument($domDocument, $document->getDomXpathNamespaces());
+            $document->setDomXpath($domXpath);
+        }
+    
+        return $domXpath;
     }
     
     /**
@@ -59,22 +61,5 @@ abstract class AbstractDocumentResolver implements DomDocumentProviderInterface
         }
         
         return $this->domDocumentFactorySelector;
-    }
-
-    /**
-     * @return \DOMXPath
-     */
-    public function getDomXpath()
-    {
-        $document = $this->getDocument();
-        $domXpath = $document->getDomXpath();
-        if (!$domXpath) {
-            $domDocument = $this->getDomDocument();
-            $domXpathFactory = $this->getDomXpathFactory();
-            $domXpath = $domXpathFactory->fromDomDocument($domDocument, $document->getDomXpathNamespaces());
-            $document->setDomXpath($domXpath);
-        }
-
-        return $domXpath;
     }
 }
